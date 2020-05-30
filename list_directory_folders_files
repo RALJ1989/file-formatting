@@ -8,4 +8,4 @@ write = csv.writer(excelFile, quoting = csv.QUOTE_ALL)  # allows writing to .csv
 
 for f in sorted(os.listdir("C:\\Users\\Rozh\\OneDrive\\Documents")):  # parent directory from which you wish to read files & folders
     print(f)
-    write.writerow([f])  # writes a single row per folder or file present in the parent directory
+    write.writerow([f])  # writes a single row per folder or file present in the parent directory (modify the path to whatever you desire)
