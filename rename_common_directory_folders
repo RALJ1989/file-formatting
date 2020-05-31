@@ -1,0 +1,35 @@
+#! python3
+
+import shutil, os, re  # install these if necessary
+
+targetFolder = 'C:\\Users\\Rozh\\OneDrive\\Documents'  # directory where the target folders are located (modify as required)
+os.chdir(targetFolder)
+
+print('Old folder name?')
+oldFolderName = input('')  # the existing unique identifier of the common folders (e.g. date, id)
+print('New folder name?')
+newFolderName = input()  # the new unique identifier which you wish to update these common folders to
+
+targetFolderRegex = re.compile(r'(Insert Name Stem)' + re.escape(oldFolderName))  # regex for finding folders with a common stem and the existing unique identifier (modify as required)
+
+for folderName,subfolders,filenames in os.walk(targetFolder):
+    for subfolder in subfolders:
+        # print(subfolder)
+        search1 = targetFolderRegex.search(subfolder)
+        if search1 != None:
+            print('Folder: ' + str(subfolder))
+            newName = search1.group(1) + newFolderName
+            print('New folder name: ' + newName)  # proposed new folder name
+            print('Do you wish to proceed? (y/n)')  # everything that follows here is an optional gate to control updating of files (if you don't trust the script 100%!)
+            proceedGate = input()
+            if proceedGate == ('y'):
+                shutil.move(os.path.join(folderName, subfolder),os.path.join(folderName, newName))
+                print('Finished renaming folder\n')
+                continue
+            elif proceedGate == ('n'):
+                print('Did not rename folder\n')
+                continue
+            else:
+                print('Error\n')
+        else:
+            print('Folder does not need renaming\n')
