@@ -1,0 +1,38 @@
+#! python3
+
+import shutil, os, re  # install these if necessary
+
+print('New folder name?')
+newFolderName = input()  # custom sub-directory which you wish to point to
+
+targetFolder = 'C:\\Users\\Rozh\\OneDrive\\Documents\\' + str(newFolderName)  # parent directory which this sub-directory belongs to (modify as required)
+os.chdir(targetFolder)
+
+print('Old file name?')
+oldFileName = input('')  # the existing unique identifier of the common files (e.g. date, id)
+print('New file name?')
+newFileName = input()  # the new unique identifier which you wish to update these common files to
+
+targetFileRegex = re.compile(r'(Insert Name Stem)' + re.escape(oldFileName) + r'(.+)(docx|pdf|csv|xlsx)')  # regex for finding files with a common stem, the existing unique identifier, and specified file types (modify as required)
+
+for folderName,subfolders,filenames in os.walk(targetFolder):
+    for filename in filenames:
+        print(filename)
+        search1 = targetFileRegex.search(filename)
+        if search1 != None:
+            print('Old file name: ' + str(filename))
+            newName = search1.group(1) + newFileName + search1.group(2) + search1.group(3)
+            print('New file name: ' + newName)  # proposed new file name
+            print('Do you wish to proceed? (y/n)')  # everything that follows here is an optional gate to control updating of folders (if you don't trust the script 100%!)
+            proceedGate = input()
+            if proceedGate == ('y'):
+                shutil.move(os.path.join(folderName, filename),os.path.join(folderName, newName))
+                print('Finished renaming file\n')
+                continue
+            elif proceedGate == ('n'):
+                print('Did not rename file\n')
+                continue
+            else:
+                print('Error\n')
+        else:
+            print('File does not need renaming\n')
